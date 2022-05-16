@@ -69,7 +69,9 @@ jobs:
 
   dependencies:
     name: Install ${{ matrix.lib }} for ${{ matrix.idris-version }}
-    needs: read-ver
+    needs:
+      - read-ver
+      - toml
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1 # We need sequential run!
