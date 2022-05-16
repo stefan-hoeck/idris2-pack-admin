@@ -125,4 +125,4 @@ jobs:
           name: dependencies-for-${{ matrix.idris-version }}
           path: /root/.idris2/
       - name: Build lib
-        run: idris2 --build pack.ipkg
+        run: idris2 --build pack-admin.ipkg
