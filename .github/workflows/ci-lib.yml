@@ -69,7 +69,9 @@ jobs:
 
   dependencies:
     name: Install ${{ matrix.lib }} for ${{ matrix.idris-version }}
-    needs: read-ver
+    needs:
+      - read-ver
+      - toml
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1 # We need sequential run!
@@ -91,10 +93,8 @@ jobs:
           name: dependencies-for-${{ matrix.idris-version }}
           path: /root/.idris2/
         continue-on-error: true
-      - name: Make ${{ matrix.lib }}
-        run: make lib
       - name: Install ${{ matrix.lib }}
-        run: make install
+        run: make install-lib
       - name: Save installed lib
         uses: actions/upload-artifact@master
         with:
@@ -125,4 +125,4 @@ jobs:
           name: dependencies-for-${{ matrix.idris-version }}
           path: /root/.idris2/
       - name: Build lib
-        run: idris2 --build pack.ipkg
+        run: idris2 --build pack-admin.ipkg
