@@ -47,13 +47,20 @@ writeLatestDB path e = do
   ndb <- dbOf e.db
   write path (printDB ndb)
 
+setColl : DBName -> Config e -> Config e
+setColl db = {collection := db}
+
 export covering
 runCmd : HasIO io => EitherT PackErr io ()
 runCmd = do
-  (c,cmd) <- getConfig readCmd Help
+  (c',cmd) <- getConfig readCmd Help
   case cmd of
-    CheckDB _          => idrisEnv c >>= checkDB
-    FromHEAD p         => env c >>= writeLatestDB p
+    CheckDB db         =>
+      let c = setColl db c'
+       in idrisEnv c >>= checkDB
+    FromHEAD p         =>
+      let c = setColl "HEAD" c'
+       in env c >>= writeLatestDB p
     Help               => putStrLn """
       Usage: pack-admin [cmd] [args]
 
