@@ -47,15 +47,14 @@ checkPkg e p = do
       report p rp $ withGit (tmpDir e) url commit $ do
         let pf = patchFile e pn ipkg
         when !(exists pf) (patch ipkg pf)
-        idrisPkg e "--install-with-src" ipkg
-        idrisPkg e "--install" ipkg
+        idrisPkg e (packageInstallPrefix e rp) "--install-with-src" ipkg
 
     RIpkg ipkg d =>
-      report p rp $ idrisPkg e "--install" ipkg
+      report p rp $ idrisPkg e (packageInstallPrefix e rp) "--install" ipkg
 
     RLocal _ dir ipkg d => do
       report p rp $ inDir dir $
-        idrisPkg e "--install" ipkg
+        idrisPkg e (packageInstallPrefix e rp) "--install" ipkg
 
     _ => updateRep p (Success rp)
 
