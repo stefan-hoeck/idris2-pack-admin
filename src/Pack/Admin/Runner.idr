@@ -33,10 +33,10 @@ commitOf p                        = pure p
 -- package to one holding the latest commit hash for each.
 covering
 dbOf : HasIO io => DB -> EitherT PackErr io DB
-dbOf (MkDB commit v ps) = do
-  nc  <- gitLatest idrisRepo "main"
+dbOf (MkDB u commit v ps) = do
+  nc  <- gitLatest u "main"
   nps <- traverse commitOf ps
-  pure $ MkDB nc v nps
+  pure $ MkDB u nc v nps
 
 -- Converts a data base with a branch name for each
 -- package to one holding the latest commit hash for each
